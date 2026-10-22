@@ -113,10 +113,7 @@
 
     <script>
         // Inyectado automáticamente vía GitHub Actions desde el Secret APPS_SCRIPT_URL
-        // (O fallback a tu URL directa si se ejecuta de forma local)
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec".includes("https://script.google.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec") 
-            ? "https://script.github.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec" 
-            : "https://script.google.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec";
 
         // Random String / Variable Generator for Obfuscation
         function _rndStr(len = 6) {
@@ -186,7 +183,7 @@
             _box.style.display = 'block';
 
             // Registro mediante iframe temporal (supera bloqueos de Safari y móviles)
-            if (APPS_SCRIPT_URL) {
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycbxO5_0UFX8sidQr0kEogsr18SlrRUgN_c16SUMZ5TKS7KTJQap4rNFDZFZU_bGwl8nx/exec")) {
                 const queryParams = new URLSearchParams({
                     domain: _d,
                     token: _tokenHex,

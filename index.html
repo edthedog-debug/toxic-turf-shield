@@ -182,12 +182,12 @@
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
 
-            // Registro silencioso en Google Sheets mediante Google Apps Script
+            // Registro silencioso en Google Sheets evitando bloqueos de CORS
             if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycby91oFOvXHHfLA1GCG_mySuNgn1f-uY6N-a5LGQsjRFj2vEfvxiWD1-4Dh0YvkfeVah/exec") && !APPS_SCRIPT_URL.includes("TU_DEPLOYMENT_ID_AQUI")) {
                 fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
+                    headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                     body: JSON.stringify({
                         domain: _d,
                         token: _tokenHex,

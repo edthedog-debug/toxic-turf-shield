@@ -3,7 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>T.M.P.S. // Toxic Turf Shield Generator</title>
+    
+    <!-- SEO & Search Optimization Meta Tags -->
+    <title>T.M.P.S. // Toxic Turf Shield Generator - Client-Side Anti-DDoS & Bot Mitigation</title>
+    <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator. Shield any website from request flooding, headless bots, and malicious scrapers.">
+    <meta name="keywords" content="Anti-DDoS, Layer 7 Protection, Bot Mitigation, Rate Limiting, JavaScript Obfuscation, Web Security, Cyber Security Tool, DDoS Shield, DDoS Protection Generator">
+    <meta name="author" content="edthedog-debug">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook / Discord Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://edthedog-debug.github.io/toxic-turf-shield/">
+    <meta property="og:title" content="Toxic Turf Protection System // Client-Side Anti-DDoS Shield Generator">
+    <meta property="og:description" content="Generate lightweight, polymorphic, and obfuscated Anti-DDoS tags to protect any web application against Layer 7 attacks and automated bots.">
+    <meta property="og:image" content="https://edthedog-debug.github.io/toxic-turf-shield/preview.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Toxic Turf Protection System // Anti-DDoS Generator">
+    <meta name="twitter:description" content="Anonymous, zero-dependency client-side DDoS & bot neutralizer. Deployable on any website in seconds.">
+    <meta name="twitter:image" content="https://edthedog-debug.github.io/toxic-turf-shield/preview.png">
+
     <style>
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
@@ -92,8 +112,8 @@
     </div>
 
     <script>
-        // WebApp Webhook de Google Sheets para registro directo
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/TU_DEPLOYMENT_ID_AQUI/exec";
+        // Inyectado automáticamente vía GitHub Actions desde el Secret APPS_SCRIPT_URL
+        const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
 
         // Random String / Variable Generator for Obfuscation
         function _rndStr(len = 6) {
@@ -160,7 +180,7 @@
             _box.style.display = 'block';
 
             // Registro silencioso en Google Sheets mediante Google Apps Script
-            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("TU_DEPLOYMENT_ID_AQUI")) {
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("__APPS_SCRIPT_URL__") && !APPS_SCRIPT_URL.includes("TU_DEPLOYMENT_ID_AQUI")) {
                 fetch(APPS_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',

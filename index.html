@@ -145,6 +145,12 @@
                 return;
             }
 
+            // CHIVATO DE CONTROL: Avisa si el secret no se ha inyectado en el despliegue
+            if (APPS_SCRIPT_URL.includes("__APPS_SCRIPT_URL__")) {
+                alert("ERROR: El Secret APPS_SCRIPT_URL no se ha inyectado correctamente en GitHub Actions.");
+                return;
+            }
+
             // Generate dynamic random variables on each generation
             const _vDomain = _rndStr(5);
             const _vToken = _rndStr(6);
@@ -166,41 +172,10 @@
             // Polymorphic script generation with obfuscated CDN endpoint
             const _scriptPayload = 
 `<script>
-/* [TOXIC-TURF-SHIELD // TARGET: ${_d.toUpperCase()} // SIG: ${_tokenHex}] */
+/* [TOXIC-TURF-SHIELD // TARGET: ${_d.toUpperCase()} // SIG:${_tokenHex}] */
 !(function(){
   const ${_vDomain} = decodeURIComponent(atob('${_encDomain}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
   const ${_vCdn} = decodeURIComponent(atob('${_encCdn}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
   const ${_vToken} = "${_tokenHex}";
-  window._TT_SIG = { domain: ${_vDomain}, token: ${_vToken} };
-  const ${_vFn} = document.createElement('script');
-  ${_vFn}.src = ${_vCdn} + "?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};
-  ${_vFn}.async = true;
-  document.head.appendChild(${_vFn});
-})();
-<\/script>`;
-
-            _txt.innerText = _scriptPayload;
-            _box.style.display = 'block';
-
-            // Registro mediante iframe temporal (supera bloqueos de Safari y móviles)
-            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("__APPS_SCRIPT_URL__")) {
-                const queryParams = new URLSearchParams({
-                    domain: _d,
-                    token: _tokenHex,
-                    timestamp: new Date().toISOString()
-                });
-                const fullUrl = `${APPS_SCRIPT_URL}?${queryParams.toString()}`;
-
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = fullUrl;
-                document.body.appendChild(iframe);
-
-                setTimeout(() => {
-                    document.body.removeChild(iframe);
-                }, 3000);
-            }
-        }
-    </script>
-</body>
-</html>
+  window._TT_SIG = { domain: ${_vDomain}, token:${_vToken} };
+  const ${_vFn} = document.createElement('script');${_vFn}.src = ${_vCdn} + "?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};${_vFn

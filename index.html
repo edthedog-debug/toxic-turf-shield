@@ -149,6 +149,7 @@
             const _vDomain = _rndStr(5);
             const _vToken = _rndStr(6);
             const _vFn = _rndStr(7);
+            const _vCdn = _rndStr(6);
             const _vKey = Math.floor(Math.random() * 200) + 15;
             const _tokenHex = Array.from(crypto.getRandomValues(new Uint8Array(8)))
                                    .map(b => b.toString(16).padStart(2, '0')).join('');
@@ -156,21 +157,23 @@
             // CDN path on your GitHub Pages repo
             const _u = "edthedog-debug";
             const _r = "secure-shield-cdn";
-            const _cdnUrl = `https://${_u}.github.io/${_r}/shield.min.js`;
+            const _rawCdnUrl = `https://${_u}.github.io/${_r}/shield.min.js`;
 
-            // Obfuscated Encoded Target Domain
+            // Obfuscated Encoded Target Domain and CDN URL
             const _encDomain = _obfuscate(_d, _vKey);
+            const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
 
-            // Polymorphic script generation
+            // Polymorphic script generation with obfuscated CDN endpoint
             const _scriptPayload = 
 `<script>
 /* [TOXIC-TURF-SHIELD // TARGET: ${_d.toUpperCase()} // SIG: ${_tokenHex}] */
 !(function(){
   const ${_vDomain} = decodeURIComponent(atob('${_encDomain}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
+  const ${_vCdn} = decodeURIComponent(atob('${_encCdn}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
   const ${_vToken} = "${_tokenHex}";
   window._TT_SIG = { domain: ${_vDomain}, token: ${_vToken} };
   const ${_vFn} = document.createElement('script');
-  ${_vFn}.src = "${_cdnUrl}?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};
+  ${_vFn}.src = ${_vCdn} + "?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};
   ${_vFn}.async = true;
   document.head.appendChild(${_vFn});
 })();

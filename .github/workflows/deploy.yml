@@ -15,9 +15,22 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Inject Google Sheets Webhook Secret
+        env:
+          URL_SECRET: ${{ secrets.APPS_SCRIPT_URL }}
         run: |
-          # Replace the __APPS_SCRIPT_URL__ placeholder in index.html with the GitHub secret
-          sed -i 's|__APPS_SCRIPT_URL__|${{ secrets.APPS_SCRIPT_URL }}|g' index.html
+          # Safe replacement using node to handle URL special characters properly
+          node -e '
+            const fs = require("fs");
+            let content = fs.readFileSync("index.html", "utf8");
+            const secret = process.env.URL_SECRET;
+            if (!secret) {
+              console.error("ERROR: APPS_SCRIPT_URL secret is not set in GitHub repository settings!");
+              process.exit(1);
+            }
+            content = content.replace(/__APPS_SCRIPT_URL__/g, secret);
+            fs.writeFileSync("index.html", content, "utf8");
+            console.log("APPS_SCRIPT_URL injected successfully.");
+          '
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

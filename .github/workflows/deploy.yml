@@ -25,13 +25,12 @@ jobs:
             let content = fs.readFileSync("index.html", "utf8");
             const secret = process.env.URL_SECRET;
             if (!secret) {
-              console.error("ERROR: APPS_SCRIPT_URL secret is not set in GitHub repository settings!");
+              console.error("ERROR: APPS_SCRIPT_URL secret is not defined in GitHub Secrets!");
               process.exit(1);
             }
-            // Reemplaza todas las instancias de __APPS_SCRIPT_URL__ por la URL del secret
-            content = content.replaceAll("__APPS_SCRIPT_URL__", secret);
+            content = content.replace("const APPS_SCRIPT_URL = \"__APPS_SCRIPT_URL__\";", `const APPS_SCRIPT_URL = "${secret}";`);
             fs.writeFileSync("index.html", content, "utf8");
-            console.log("APPS_SCRIPT_URL injected successfully.");
+            console.log("APPS_SCRIPT_URL inyectado correctamente.");
           '
 
       - name: Deploy to GitHub Pages

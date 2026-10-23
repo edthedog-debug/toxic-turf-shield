@@ -99,7 +99,7 @@
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
 
-            // Log execution via fetch (no-cors) to prevent browser/iframe security blocks
+            // Log execution via Pixel Tracker (Image object) to bypass CORS and mobile security restrictions
             if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
                 const queryParams = new URLSearchParams({
                     domain: _d,
@@ -108,13 +108,8 @@
                 });
                 const fullUrl = `${APPS_SCRIPT_URL}?${queryParams.toString()}`;
 
-                fetch(fullUrl, { method: 'GET', mode: 'no-cors' })
-                    .then(() => {
-                        console.log("Log sent successfully to Google Sheets.");
-                    })
-                    .catch(err => {
-                        console.error("Error sending log:", err);
-                    });
+                const tracker = new Image();
+                tracker.src = fullUrl;
             }
         }
     </script>

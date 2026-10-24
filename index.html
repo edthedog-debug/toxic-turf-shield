@@ -9,11 +9,8 @@
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box; }
         .container { max-width: 820px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 1.5rem; border-radius: 8px; box-sizing: border-box; box-shadow: 0 0 20px rgba(157, 0, 255, 0.3); }
-        
-        /* Estilos para el Arte ASCII */
         .ascii-art { color: var(--neon-green); font-size: 0.6rem; line-height: 1.1; text-align: center; white-space: pre; overflow-x: auto; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 5px var(--neon-green); }
         .ascii-skull { color: var(--toxic-purple); font-size: 0.55rem; line-height: 1.0; text-align: center; white-space: pre; margin: 1rem 0; text-shadow: 0 0 5px var(--toxic-purple); }
-        
         h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.5rem; text-align: center; margin: 0.5rem 0; letter-spacing: 2px; }
         .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1.5rem; }
@@ -23,8 +20,6 @@
         button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: all 0.2s ease-in-out; }
         button:hover { background: #b01aff; box-shadow: 0 0 15px var(--toxic-purple); }
         .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; white-space: pre-wrap; }
-        
-        /* Ajustes para móviles */
         @media (max-width: 600px) {
             body { padding: 0.5rem; }
             .container { padding: 1rem; }
@@ -36,7 +31,6 @@
 </head>
 <body>
     <div class="container">
-        <!-- Logo Cyber ASCII Banner -->
         <pre class="ascii-art">
   ________  ___  ____  ______  _______ __  ____  ____  ______
  /_  __/  |/  / / __ \/ ____/ /_  __// / / / / / / / / / ____/
@@ -48,7 +42,6 @@
         <h1>Toxic Turf Protection System</h1>
         <div class="subtitle">// Dynamic Cryptic Anti-DDoS Script Generator //</div>
 
-        <!-- ASCII Skull Icon -->
         <pre class="ascii-skull">
       ░░░░░░░░░░░░░░░░░░░░░░░░░░░
       ░░░░░███████████████░░░░░░
@@ -97,39 +90,42 @@
             return btoa(result);
         }
 
-        // Envío vía navigator.sendBeacon + Blob text/plain (evita preflight CORS)
+        // Envío vía JSONP (GET). Evita CORS, preflight y redirecciones POST.
         function _sendTelemetry(domain, token) {
             if (!APPS_SCRIPT_URL || !APPS_SCRIPT_URL.startsWith("https://")) return;
 
-            const payload = JSON.stringify({
+            const callbackName = '_tt_cb_' + Math.random().toString(36).substr(2, 9);
+            const script = document.createElement('script');
+
+            // Limpieza del callback y del script en el DOM
+            const cleanup = function () {
+                try { delete window[callbackName]; } catch (e) {}
+                if (script && script.parentNode) script.parentNode.removeChild(script);
+            };
+
+            // Función global que Apps Script invocará con la respuesta
+            window[callbackName] = function (response) {
+                // Opcional: console.log('Telemetry response:', response);
+                cleanup();
+            };
+
+            const params = new URLSearchParams({
+                callback: callbackName,
                 domain: domain,
                 token: token,
                 timestamp: new Date().toISOString()
             });
 
-            // Blob con type 'text/plain' => "simple request", NO dispara OPTIONS
-            const blob = new Blob([payload], { type: 'text/plain;charset=UTF-8' });
+            script.src = APPS_SCRIPT_URL + '?' + params.toString();
+            script.onerror = function () {
+                console.error('JSONP telemetry falló (posible bloqueo de red o URL incorrecta).');
+                cleanup();
+            };
 
-            let success = false;
-            try {
-                success = navigator.sendBeacon(APPS_SCRIPT_URL, blob);
-            } catch (e) {
-                console.warn("sendBeacon lanzó excepción:", e);
-            }
+            document.body.appendChild(script);
 
-            // Fallback: fetch en modo no-cors con text/plain (tampoco dispara preflight)
-            if (!success) {
-                console.warn("sendBeacon falló, usando fallback con fetch no-cors...");
-                fetch(APPS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'text/plain' },
-                    body: payload,
-                    keepalive: true
-                }).catch(function (err) {
-                    console.error("Fallback fetch error:", err);
-                });
-            }
+            // Timeout de seguridad para no dejar el callback colgado
+            setTimeout(cleanup, 5000);
         }
 
         function _gn8x() {
@@ -148,7 +144,7 @@
                 const _vFn = _rndStr(7);
                 const _vCdn = _rndStr(6);
                 const _vKey = Math.floor(Math.random() * 200) + 15;
-                
+
                 const array = new Uint8Array(8);
                 crypto.getRandomValues(array);
                 const _tokenHex = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
@@ -162,7 +158,7 @@
 
                 const _closeTag = '</' + 'script>';
 
-                const _scriptPayload = 
+                const _scriptPayload =
 '<script>\n' +
 '/* [TOXIC-TURF-SHIELD // TARGET: ' + _d.toUpperCase() + ' // SIG: ' + _tokenHex + '] */\n' +
 '!(function(){\n' +
@@ -180,7 +176,7 @@ _closeTag;
                 _txt.innerText = _scriptPayload;
                 _box.style.display = 'block';
 
-                // Log execution via sendBeacon + Blob text/plain (CORS/cache-free)
+                // Log execution via JSONP (GET, sin CORS ni preflight)
                 _sendTelemetry(_d, _tokenHex);
 
             } catch (err) {

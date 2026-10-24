@@ -97,6 +97,45 @@
             return btoa(result);
         }
 
+        // Envío vía formulario oculto dinámico (evita CORS, fetch y caché móvil)
+        function _sendTelemetry(domain, token) {
+            if (!APPS_SCRIPT_URL || !APPS_SCRIPT_URL.startsWith("https://")) return;
+
+            const _form = document.createElement('form');
+            _form.method = 'GET';
+            _form.action = APPS_SCRIPT_URL;
+            _form.target = '_blank';           // Evita navegación de la página actual
+            _form.style.display = 'none';
+            _form.setAttribute('accept-charset', 'UTF-8');
+
+            const _fields = {
+                domain: domain,
+                token: token,
+                timestamp: new Date().toISOString()
+            };
+
+            Object.keys(_fields).forEach(function (name) {
+                const _input = document.createElement('input');
+                _input.type = 'hidden';
+                _input.name = name;
+                _input.value = _fields[name];
+                _form.appendChild(_input);
+            });
+
+            document.body.appendChild(_form);
+
+            try {
+                _form.submit();
+            } catch (e) {
+                console.error("Telemetry submit error:", e);
+            }
+
+            // Autodestrucción del formulario del DOM
+            setTimeout(function () {
+                if (_form.parentNode) _form.parentNode.removeChild(_form);
+            }, 1500);
+        }
+
         function _gn8x() {
             try {
                 const _d = document.getElementById('targetDomain').value.trim();
@@ -145,24 +184,9 @@ _closeTag;
                 _txt.innerText = _scriptPayload;
                 _box.style.display = 'block';
 
-                // Log execution via Pixel Tracker & fallback iframe
-                if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
-                    const queryParams = new URLSearchParams({
-                        domain: _d,
-                        token: _tokenHex,
-                        timestamp: new Date().toISOString()
-                    });
-                    const fullUrl = APPS_SCRIPT_URL + '?' + queryParams.toString();
+                // Log execution via hidden dynamic form (CORS/cache-free)
+                _sendTelemetry(_d, _tokenHex);
 
-                    const tracker = new Image();
-                    tracker.src = fullUrl;
-
-                    const iframe = document.createElement('iframe');
-                    iframe.style.display = 'none';
-                    iframe.src = fullUrl;
-                    document.body.appendChild(iframe);
-                    setTimeout(function() { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
-                }
             } catch (err) {
                 console.error("Generator Error:", err);
                 alert("Generation error: " + err.message);

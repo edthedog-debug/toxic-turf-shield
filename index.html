@@ -16,20 +16,20 @@
     -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
-                   script-src 'self' 'unsafe-inline' https://script.google.com https://*.googleusercontent.com;
-                   style-src 'self' 'unsafe-inline';
-                   img-src 'self' data:;
-                   connect-src 'self' https://script.google.com https://*.googleusercontent.com;
-                   font-src 'self';
-                   object-src 'none';
-                   base-uri 'self';
-                   form-action 'self';">
+                    script-src 'self' 'unsafe-inline' https://script.google.com https://*.googleusercontent.com;
+                    style-src 'self' 'unsafe-inline';
+                    img-src 'self' data:;
+                    connect-src 'self' https://script.google.com https://*.googleusercontent.com;
+                    font-src 'self';
+                    object-src 'none';
+                    base-uri 'self';
+                    form-action 'self';">
 
     <style>
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
-        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box; }
-        .container { max-width: 820px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 1.5rem; border-radius: 8px; box-sizing: border-box; box-shadow: 0 0 20px rgba(157, 0, 255, 0.3); }
-        .ascii-art { color: var(--neon-green); font-size: 0.6rem; line-height: 1.1; text-align: center; white-space: pre; overflow-x: auto; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 5px var(--neon-green); }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { max-width: 820px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 1.5rem; border-radius: 8px; box-sizing: border-box; box-shadow: 0 0 25px rgba(157, 0, 255, 0.25); }
+        .ascii-art { color: var(--neon-green); font-size: 0.6rem; line-height: 1.1; text-align: center; white-space: pre; overflow-x: auto; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 8px rgba(0,255,102,0.6); }
         .ascii-skull { color: var(--toxic-purple); font-size: 0.55rem; line-height: 1.0; text-align: center; white-space: pre; margin: 1rem 0; text-shadow: 0 0 5px var(--toxic-purple); }
         h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.5rem; text-align: center; margin: 0.5rem 0; letter-spacing: 2px; }
         .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
@@ -37,9 +37,9 @@
         label { display: block; margin-bottom: 0.5rem; color: var(--neon-green); font-weight: bold; }
         input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; outline: none; }
         input:focus { border-color: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
-        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; transition: all 0.2s ease-in-out; }
+        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
         button:hover { background: #b01aff; box-shadow: 0 0 15px var(--toxic-purple); }
-        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; white-space: pre-wrap; }
+        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; }
         @media (max-width: 600px) {
             body { padding: 0.5rem; }
             .container { padding: 1rem; }
@@ -53,10 +53,10 @@
     <div class="container">
         <pre class="ascii-art">
   ________  ___  ____  ______  _______ __  ____  ____  ______
- /_  __/  |/  / / __ \/ ____/ /_  __// / / / / / / / / / ____/
-  / / / /|_/ / / /_/ / /       / /  / / / / /_/ /_/ / /___   
- / / / /  / / / ____/ /___    / /  / /_/ / __  / __  /___/ /  
-/_/ /_/  /_/ /_/    \____/   /_/   \____/_/ /_/_/ /_/_____/   
+ /_  __/  |/  / / __ \/ ____/ /_  __// / / / / / / / / ____/
+   / / / /|_/ / / /_/ / /       / /  / / / / /_/ /_/ / /___   
+  / / / /  / / / ____/ /___    / /  / /_/ / __  / __  /___/ /  
+ /_/ /_/  /_/ /_/    \____/   /_/   \____/_/ /_/_/ /_/_____/   
         </pre>
 
         <h1>Toxic Turf Protection System</h1>
@@ -64,8 +64,8 @@
 
         <pre class="ascii-skull">
       ░░░░░░░░░░░░░░░░░░░░░░░░░░░
-      ░░░░░███████████████░░░░░░
-      ░░░███████████████████░░░░
+      ░░░░███████████████░░░░░░
+      ░░███████████████████░░░░
       ░░█████████████████████░░░
       ░░████  █████████  ████░░░
       ░░████  █████████  ████░░░
@@ -92,6 +92,32 @@
         // Automatically injected via GitHub Actions from the APPS_SCRIPT_URL Secret
         const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
 
+        function _normalizeAppsScriptUrl(rawUrl) {
+            if (!rawUrl || typeof rawUrl !== 'string') return "";
+            const url = rawUrl.trim();
+            if (!url) return "";
+            if (!/^https?:\/\//i.test(url)) return "";
+            return url.replace(/[?#]+$/, "");
+        }
+
+        function _buildAppsScriptUrl(rawUrl, params) {
+            const baseUrl = _normalizeAppsScriptUrl(rawUrl);
+            if (!baseUrl) return "";
+
+            try {
+                const url = new URL(baseUrl);
+                Object.entries(params).forEach(([key, value]) => {
+                    if (value !== undefined && value !== null && value !== "") {
+                        url.searchParams.set(key, String(value));
+                    }
+                });
+                return url.toString();
+            } catch (error) {
+                console.error("[TT] URL inválida:", error);
+                return "";
+            }
+        }
+
         function _rndStr(len = 6) {
             const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
             let res = '_0x';
@@ -112,39 +138,49 @@
 
         // Envío vía JSONP (GET). Evita CORS, preflight y redirecciones POST.
         function _sendTelemetry(domain, token) {
-            if (!APPS_SCRIPT_URL || !APPS_SCRIPT_URL.startsWith("https://")) {
+            const normalizedUrl = _normalizeAppsScriptUrl(APPS_SCRIPT_URL);
+            if (!normalizedUrl) {
                 console.warn("[TT] APPS_SCRIPT_URL no está inyectada o es inválida. Abortando envío.");
                 return;
             }
 
-            const callbackName = '_tt_cb_' + Math.random().toString(36).substr(2, 9);
-            const script = document.createElement('script');
+            try {
+                const callbackName = '_tt_cb_' + Math.random().toString(36).substr(2, 9);
+                const script = document.createElement('script');
 
-            const cleanup = function () {
-                try { delete window[callbackName]; } catch (e) {}
-                if (script && script.parentNode) script.parentNode.removeChild(script);
-            };
+                const cleanup = function () {
+                    try { delete window[callbackName]; } catch (e) {}
+                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                };
 
-            window[callbackName] = function (response) {
-                console.log("[TT] Respuesta JSONP recibida:", response);
-                cleanup();
-            };
+                window[callbackName] = function (response) {
+                    console.log("[TT] Respuesta JSONP recibida:", response);
+                    cleanup();
+                };
 
-            const params = new URLSearchParams({
-                callback: callbackName,
-                domain: domain,
-                token: token,
-                timestamp: new Date().toISOString()
-            });
+                const endpoint = _buildAppsScriptUrl(normalizedUrl, {
+                    callback: callbackName,
+                    domain: domain,
+                    token: token,
+                    timestamp: new Date().toISOString()
+                });
 
-            script.src = APPS_SCRIPT_URL + '?' + params.toString();
-            script.onerror = function () {
-                console.error("[TT] JSONP falló (posible bloqueo CSP, red o URL incorrecta).");
-                cleanup();
-            };
+                if (!endpoint) {
+                    console.warn("[TT] No se pudo construir la URL de Apps Script.");
+                    return;
+                }
 
-            document.body.appendChild(script);
-            setTimeout(cleanup, 5000);
+                script.src = endpoint;
+                script.onerror = function () {
+                    console.error("[TT] JSONP falló (posible bloqueo CSP, red o URL incorrecta).");
+                    cleanup();
+                };
+
+                document.body.appendChild(script);
+                setTimeout(cleanup, 5000);
+            } catch (error) {
+                console.error("[TT] Error enviando telemetry:", error);
+            }
         }
 
         function _gn8x() {

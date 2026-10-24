@@ -5,6 +5,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T.M.P.S. // Toxic Turf Shield Generator - Client-Side Anti-DDoS & Bot Mitigation</title>
     <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator.">
+
+    <!--
+      CSP PERMISIVA Y EXPLÍCITA:
+      - 'unsafe-inline' en script-src: necesario porque todo el JS está inline.
+      - 'unsafe-inline' en style-src: necesario para las etiquetas <style>.
+      - https://script.google.com: endpoint del Web App (JSONP).
+      - https://*.googleusercontent.com: dominio al que Apps Script redirige el GET.
+      - Si algún día cambias el endpoint, añade su origen aquí.
+    -->
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                   script-src 'self' 'unsafe-inline' https://script.google.com https://*.googleusercontent.com;
+                   style-src 'self' 'unsafe-inline';
+                   img-src 'self' data:;
+                   connect-src 'self' https://script.google.com https://*.googleusercontent.com;
+                   font-src 'self';
+                   object-src 'none';
+                   base-uri 'self';
+                   form-action 'self';">
+
     <style>
         :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box; }
@@ -92,20 +112,21 @@
 
         // Envío vía JSONP (GET). Evita CORS, preflight y redirecciones POST.
         function _sendTelemetry(domain, token) {
-            if (!APPS_SCRIPT_URL || !APPS_SCRIPT_URL.startsWith("https://")) return;
+            if (!APPS_SCRIPT_URL || !APPS_SCRIPT_URL.startsWith("https://")) {
+                console.warn("[TT] APPS_SCRIPT_URL no está inyectada o es inválida. Abortando envío.");
+                return;
+            }
 
             const callbackName = '_tt_cb_' + Math.random().toString(36).substr(2, 9);
             const script = document.createElement('script');
 
-            // Limpieza del callback y del script en el DOM
             const cleanup = function () {
                 try { delete window[callbackName]; } catch (e) {}
                 if (script && script.parentNode) script.parentNode.removeChild(script);
             };
 
-            // Función global que Apps Script invocará con la respuesta
             window[callbackName] = function (response) {
-                // Opcional: console.log('Telemetry response:', response);
+                console.log("[TT] Respuesta JSONP recibida:", response);
                 cleanup();
             };
 
@@ -118,13 +139,11 @@
 
             script.src = APPS_SCRIPT_URL + '?' + params.toString();
             script.onerror = function () {
-                console.error('JSONP telemetry falló (posible bloqueo de red o URL incorrecta).');
+                console.error("[TT] JSONP falló (posible bloqueo CSP, red o URL incorrecta).");
                 cleanup();
             };
 
             document.body.appendChild(script);
-
-            // Timeout de seguridad para no dejar el callback colgado
             setTimeout(cleanup, 5000);
         }
 
@@ -176,7 +195,6 @@ _closeTag;
                 _txt.innerText = _scriptPayload;
                 _box.style.display = 'block';
 
-                // Log execution via JSONP (GET, sin CORS ni preflight)
                 _sendTelemetry(_d, _tokenHex);
 
             } catch (err) {

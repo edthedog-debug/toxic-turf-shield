@@ -6,14 +6,6 @@
     <title>T.M.P.S. // Toxic Turf Shield Generator - Client-Side Anti-DDoS & Bot Mitigation</title>
     <meta name="description" content="Free, anonymous, and polymorphic client-side Layer 7 Anti-DDoS protection generator.">
 
-    <!--
-      CSP PERMISIVA Y EXPLÍCITA:
-      - 'unsafe-inline' en script-src: necesario porque todo el JS está inline.
-      - 'unsafe-inline' en style-src: necesario para las etiquetas <style>.
-      - https://script.google.com: endpoint del Web App (JSONP).
-      - https://*.googleusercontent.com: dominio al que Apps Script redirige el GET.
-      - Si algún día cambias el endpoint, añade su origen aquí.
-    -->
     <meta http-equiv="Content-Security-Policy"
           content="default-src 'self';
                     script-src 'self' 'unsafe-inline' https://script.google.com https://*.googleusercontent.com;
@@ -40,6 +32,7 @@
         button { background: var(--toxic-purple); color: #fff; border: none; padding: 0.9rem 1.5rem; font-family: inherit; font-weight: bold; cursor: pointer; width: 100%; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
         button:hover { background: #b01aff; box-shadow: 0 0 15px var(--toxic-purple); }
         .output-box { background: #000; border: 1px dashed var(--neon-green); padding: 1.2rem; margin-top: 1.5rem; border-radius: 4px; word-break: break-all; font-size: 0.82rem; color: var(--neon-green); display: none; }
+        .status { margin-top: 1rem; font-size: 0.72rem; color: #ccc; opacity: 0.9; }
         @media (max-width: 600px) {
             body { padding: 0.5rem; }
             .container { padding: 1rem; }
@@ -86,35 +79,28 @@
         <div id="resultContainer" class="output-box">
             <code id="resultText"></code>
         </div>
+        <div id="statusBox" class="status">Status: ready.</div>
     </div>
 
     <script>
-        // Automatically injected via GitHub Actions from the APPS_SCRIPT_URL Secret
         const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
 
-        function _normalizeAppsScriptUrl(rawUrl) {
-            if (!rawUrl || typeof rawUrl !== 'string') return "";
-            const url = rawUrl.trim();
-            if (!url) return "";
-            if (!/^https?:\/\//i.test(url)) return "";
-            return url.replace(/[?#]+$/, "");
+        function isValidHttpUrl(value) {
+            if (typeof value !== 'string') return false;
+            const trimmed = value.trim();
+            if (!trimmed) return false;
+            try {
+                const url = new URL(trimmed);
+                return url.protocol === 'http:' || url.protocol === 'https:';
+            } catch (error) {
+                return false;
+            }
         }
 
-        function _buildAppsScriptUrl(rawUrl, params) {
-            const baseUrl = _normalizeAppsScriptUrl(rawUrl);
-            if (!baseUrl) return "";
-
-            try {
-                const url = new URL(baseUrl);
-                Object.entries(params).forEach(([key, value]) => {
-                    if (value !== undefined && value !== null && value !== "") {
-                        url.searchParams.set(key, String(value));
-                    }
-                });
-                return url.toString();
-            } catch (error) {
-                console.error("[TT] URL inválida:", error);
-                return "";
+        function setStatus(message) {
+            const el = document.getElementById('statusBox');
+            if (el) {
+                el.textContent = 'Status: ' + message;
             }
         }
 
@@ -136,50 +122,56 @@
             return btoa(result);
         }
 
-        // Envío vía JSONP (GET). Evita CORS, preflight y redirecciones POST.
         function _sendTelemetry(domain, token) {
-            const normalizedUrl = _normalizeAppsScriptUrl(APPS_SCRIPT_URL);
-            if (!normalizedUrl) {
-                console.warn("[TT] APPS_SCRIPT_URL no está inyectada o es inválida. Abortando envío.");
+            const rawUrl = APPS_SCRIPT_URL && APPS_SCRIPT_URL.trim ? APPS_SCRIPT_URL.trim() : '';
+            if (!isValidHttpUrl(rawUrl) || rawUrl.includes('__APPS_SCRIPT_URL__')) {
+                console.warn('[TT] APPS_SCRIPT_URL no está configurada o no es válida. Telemetría desactivada.');
+                setStatus('telemetry disabled (missing secret)');
                 return;
             }
 
             try {
-                const callbackName = '_tt_cb_' + Math.random().toString(36).substr(2, 9);
+                const callbackName = '_tt_cb_' + Math.random().toString(36).slice(2, 10);
                 const script = document.createElement('script');
+                script.async = true;
 
                 const cleanup = function () {
-                    try { delete window[callbackName]; } catch (e) {}
-                    if (script && script.parentNode) script.parentNode.removeChild(script);
+                    try {
+                        delete window[callbackName];
+                    } catch (e) {}
+                    if (script && script.parentNode) {
+                        script.parentNode.removeChild(script);
+                    }
                 };
 
                 window[callbackName] = function (response) {
-                    console.log("[TT] Respuesta JSONP recibida:", response);
+                    console.log('[TT] Respuesta JSONP recibida:', response);
+                    if (response && response.ok) {
+                        setStatus('telemetry sent successfully');
+                    } else {
+                        setStatus('telemetry failed');
+                    }
                     cleanup();
                 };
 
-                const endpoint = _buildAppsScriptUrl(normalizedUrl, {
-                    callback: callbackName,
-                    domain: domain,
-                    token: token,
-                    timestamp: new Date().toISOString()
-                });
+                const endpoint = new URL(rawUrl);
+                endpoint.searchParams.set('callback', callbackName);
+                endpoint.searchParams.set('domain', domain);
+                endpoint.searchParams.set('token', token);
+                endpoint.searchParams.set('timestamp', new Date().toISOString());
 
-                if (!endpoint) {
-                    console.warn("[TT] No se pudo construir la URL de Apps Script.");
-                    return;
-                }
-
-                script.src = endpoint;
+                script.src = endpoint.toString();
                 script.onerror = function () {
-                    console.error("[TT] JSONP falló (posible bloqueo CSP, red o URL incorrecta).");
+                    console.error('[TT] JSONP falló. Verifica la URL del Apps Script y la CSP.');
+                    setStatus('telemetry error');
                     cleanup();
                 };
 
                 document.body.appendChild(script);
-                setTimeout(cleanup, 5000);
+                setTimeout(cleanup, 7000);
             } catch (error) {
-                console.error("[TT] Error enviando telemetry:", error);
+                console.error('[TT] Error enviando telemetry:', error);
+                setStatus('telemetry error');
             }
         }
 
@@ -230,12 +222,13 @@ _closeTag;
 
                 _txt.innerText = _scriptPayload;
                 _box.style.display = 'block';
+                setStatus('generated');
 
                 _sendTelemetry(_d, _tokenHex);
 
             } catch (err) {
-                console.error("Generator Error:", err);
-                alert("Generation error: " + err.message);
+                console.error('Generator Error:', err);
+                alert('Generation error: ' + err.message);
             }
         }
     </script>

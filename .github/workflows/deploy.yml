@@ -3,6 +3,7 @@ name: Deploy Toxic Turf Shield Generator
 on:
   push:
     branches: [ main, master ]
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -16,25 +17,34 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Inject Google Sheets Webhook Secret
+      - name: Inject Google Sheets secret into HTML
         env:
           URL_SECRET: ${{ secrets.APPS_SCRIPT_URL }}
+        shell: bash
         run: |
-          node -e '
-            const fs = require("fs");
-            let content = fs.readFileSync("index.html", "utf8");
-            const secret = process.env.URL_SECRET;
-            if (!secret) {
-              console.error("ERROR: APPS_SCRIPT_URL secret is not defined in GitHub Secrets!");
-              process.exit(1);
-            }
-            content = content.replace("const APPS_SCRIPT_URL = \"__APPS_SCRIPT_URL__\";", `const APPS_SCRIPT_URL = "${secret}";`);
-            fs.writeFileSync("index.html", content, "utf8");
-            console.log("APPS_SCRIPT_URL inyectado correctamente.");
-          '
+          node - <<'NODE'
+          const fs = require('fs');
+          const path = 'index.html';
+          let content = fs.readFileSync(path, 'utf8');
+          const placeholder = 'const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";';
+          const secret = process.env.URL_SECRET || '';
+
+          if (!secret) {
+            console.warn('WARN: APPS_SCRIPT_URL no está definida. Se dejará vacía para que la página no falle.');
+            content = content.replace(placeholder, 'const APPS_SCRIPT_URL = "";');
+          } else {
+            const safe = JSON.stringify(secret);
+            content = content.replace(placeholder, `const APPS_SCRIPT_URL = ${safe};`);
+          }
+
+          fs.writeFileSync(path, content, 'utf8');
+          console.log('APPS_SCRIPT_URL inyectado correctamente (o dejado vacío si no existe).');
+          NODE
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
+          force_orphan: true
+          publish_branch: gh-pages

